@@ -46,7 +46,7 @@ class CategoryController extends Controller
 
         Category::create($validatedData);
 
-        return redirect()->route('category.index')->withSuccess('You have successfully created a Category!');
+        return redirect()->route('category.index')->withSuccess('You have successfully added a category!');
     }
 
     /**
@@ -86,7 +86,7 @@ class CategoryController extends Controller
 
         $category->update($validatedData);
 
-        return redirect()->route('category.index')->withSuccess('You have successfully updated a Category!');
+        return redirect()->route('category.index')->withSuccess('You have successfully updated a category!');
     }
 
     /**
@@ -113,6 +113,6 @@ class CategoryController extends Controller
 
         $category->delete();
 
-        return redirect()->route('category.index')->withSuccess('You have successfully deleted a Category!');
+        return redirect()->route('category.index')->withSuccess('You have successfully deleted a category!');
     }
 }
