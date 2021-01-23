@@ -98,8 +98,8 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
         if ($category->children) {
-            foreach ($category->children()->with('posts')->get() as $child) {
-                foreach ($child->posts as $post) {
+            foreach ($category->children()->with('listings')->get() as $child) {
+                foreach ($child->listings as $listing) {
                     $post->update(['category_id' => NULL]);
                 }
             }
