@@ -17,9 +17,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/home', 'App\Http\Controllers\HomeController@index')->name('home');
+
+
 Auth::routes();
 
 Route::resource('category', 'App\Http\Controllers\CategoryController');
 Route::resource('listing', 'App\Http\Controllers\ListingController');
 
-Route::get('/home', 'App\Http\Controllers\HomeController@index')->name('home');
