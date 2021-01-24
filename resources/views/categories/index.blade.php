@@ -16,7 +16,7 @@
                               <div class="button-group d-flex">
                                 <button type="button" class="btn btn-sm btn-primary mr-1 edit-category" data-toggle="modal" data-target="#editCategoryModal" data-id="{{ $category->id }}" data-name="{{ $category->name }}">Edit</button>
     
-                                <form action="{{ route('category.destroy', $category->id) }}" method="POST">
+                                <form action="{{ route('category.destroy', $category->id, false) }}" method="POST">
                                   @csrf
                                   @method('DELETE')
     
@@ -35,7 +35,7 @@
                                       <div class="button-group d-flex">
                                         <button type="button" class="btn btn-sm btn-primary mr-1 edit-category" data-toggle="modal" data-target="#editCategoryModal" data-id="{{ $child->id }}" data-name="{{ $child->name }}">Edit</button>
     
-                                        <form action="{{ route('category.destroy', $child->id) }}" method="POST">
+                                        <form action="{{ route('category.destroy', $child->id, false) }}" method="POST">
                                           @csrf
                                           @method('DELETE')
     
@@ -60,7 +60,7 @@
                 <div class="card-header">{{ __('Create') }}</div>
 
                 <div class="card-body">
-                    <form action="{{ route('category.store') }}" method="POST">
+                    <form action="{{ route('category.store', [], false) }}" method="POST">
                         @csrf
     
                         <div class="form-group">

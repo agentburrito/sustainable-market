@@ -19,15 +19,15 @@
                 <!-- Authentication Links -->
                 @guest
                     <li class="nav-item border-right">
-                        <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                        <a class="nav-link" href="{{ route('login', [], false) }}">{{ __('Login') }}</a>
                     </li>
                     
                     <li class="nav-item border-right">
-                        <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                        <a class="nav-link" href="{{ route('register', [], false) }}">{{ __('Register') }}</a>
                     </li>
 
                     <li class="nav-item ">
-                        <a class="nav-link" href="{{ route('register', ['organization' => true]) }}">{{ __('Organization Register') }}</a>
+                        <a class="nav-link" href="{{ route('register', ['organization' => true], false) }}">{{ __('Organization Register') }}</a>
                     </li>
                 @else
                     <li class="nav-item dropdown">
@@ -37,24 +37,24 @@
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{{ route('user.profile.index') }}"">
+                            <a class="dropdown-item" href="{{ route('user.profile.index', [], false) }}"">
                                 {{ __('My Profile') }}
                             </a>
 
                             @if(Auth::user()->hasRole('admin'))
-                                <a class="dropdown-item" href="{{ route('category.index') }}"">
+                                <a class="dropdown-item" href="{{ route('category.index', [], false) }}"">
                                     {{ __('Manage Categories') }}
                                 </a>
                             @endif
 
                             @if(Auth::user() and Auth::user()->organizations->count())
-                                <a class="dropdown-item" href="{{ route('organization.edit', Auth::user()->organizations->first()) }}">
+                                <a class="dropdown-item" href="{{ route('organization.edit', Auth::user()->organizations->first(), false) }}">
                                     {{ __('Manage Organization') }}
                                 </a>
                             @endif
 
 
-                            <a class="dropdown-item" href="{{ route('logout') }}"
+                            <a class="dropdown-item" href="{{ route('logout', [], false) }}"
                                onclick="event.preventDefault();
                                              document.getElementById('logout-form').submit();">
                                 {{ __('Logout') }}
@@ -68,12 +68,12 @@
                 @endguest
 
                 <li class="nav-item" style="margin-left: 1rem;">
-                    <a class="btn btn-outline-success btn-xs" href="{{ route('listing.create') }}">Create Listing</a>
+                    <a class="btn btn-outline-success btn-xs" href="{{ route('listing.create', [], false) }}">Create Listing</a>
                 </li>
 
                 @if(Auth::user() and Auth::user()->organizations->count())
                     <li class="nav-item px-4">
-                        <a class="btn btn-outline-secondary btn-xs" href="{{ route('listing.create', ['wanted' => true]) }}">Create Organization Listing</a>
+                        <a class="btn btn-outline-secondary btn-xs" href="{{ route('listing.create', ['wanted' => true], false) }}">Create Organization Listing</a>
                     </li>
                 @endif
             </ul>

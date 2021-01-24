@@ -10,7 +10,7 @@
                 </a>                                
             </div>
             @foreach($category->children as $subcategory)                                  
-                <a href="{{ route('category.show', $subcategory) }}" class="list-group-item"> {!!$subcategory->name!!} <span class="badge badge-light">{!! $subcategory->listings->count() !!}</span></a>
+                <a href="{{ route('category.show', $subcategory, false) }}" class="list-group-item"> {!!$subcategory->name!!} <span class="badge badge-light">{!! $subcategory->listings->count() !!}</span></a>
             @endforeach	                                
         </div>
     @endforeach           

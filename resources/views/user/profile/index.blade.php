@@ -3,7 +3,7 @@
 @section('user.content')
 <div class="card">
     <div class="card-body">
-        <form action="{{ route('user.profile.update') }}" method="POST">
+        <form action="{{ route('user.profile.update', [], false) }}" method="POST">
             {{ csrf_field() }}
             <div class="form-group">
                 <label for="name">Name</label>

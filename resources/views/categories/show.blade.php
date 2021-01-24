@@ -13,7 +13,7 @@
                     @foreach($parentCategories as $pc)
                     @if($pc->children)
                     @foreach($pc->children as $child)
-                        <a class="nav-link {{ return_if(on_page('category/' . $child->id), 'active') }}" href="{{ route('category.show', $child) }}">{{ $child->parent->name }} - {{ $child->name }}</a>
+                        <a class="nav-link {{ return_if(on_page('category/' . $child->id), 'active') }}" href="{{ route('category.show', $child, false) }}">{{ $child->parent->name }} - {{ $child->name }}</a>
                     @endforeach
                     @endif
                     @endforeach 
@@ -38,7 +38,7 @@
                 <div class="card-body">
                 <h5 class="card-title">{{$listing->title}} <span class="float-right text-success">${{ number_format($listing->price, 2) }}</span></h5>
                 <p class="card-text">{{$listing->description}}</p>
-                <a href="{{ route('listing.show', $listing) }}" class="btn btn-light btn-block stretched-link float-right">View</a>
+                <a href="{{ route('listing.show', $listing, false) }}" class="btn btn-light btn-block stretched-link float-right">View</a>
                 </div>
             </div>
             @endforeach
@@ -56,7 +56,7 @@
                 <h5 class="card-title">{{$listing->title}}</h5>
                 <p class="card-text">{{$listing->description}}</p>
                 <p class="card-text"><em>{{$listing->organization->name}}</em></p>
-                <a href="{{ route('listing.show', $listing) }}" class="btn btn-light btn-block stretched-link float-right">View</a>
+                <a href="{{ route('listing.show', $listing, false) }}" class="btn btn-light btn-block stretched-link float-right">View</a>
                 </div>
             </div>
             @endforeach
