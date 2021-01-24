@@ -15,11 +15,11 @@
 
             <!-- Right Side Of Navbar -->
             <ul class="navbar-nav ml-auto">
-                <!-- Authentication Links -->
                 <li class="nav-item px-4">
                     <a class="btn btn-success btn-xs" href="{{ route('listing.create') }}">Create Listing</a>
                 </li>
                 
+                <!-- Authentication Links -->
                 @guest
                     @if (Route::has('login'))
                         <li class="nav-item">

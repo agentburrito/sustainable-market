@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Listing;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class ListingController extends Controller
@@ -23,7 +25,8 @@ class ListingController extends Controller
      */
     public function create()
     {
-        //
+        $categories = Category::where('parent_id', '!=', NULL)->with('parent')->get();
+        return view('listings.create', compact('categories'));
     }
 
     /**
@@ -33,8 +36,29 @@ class ListingController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        //
+    {        
+
+        $this->validate($request, [
+            'title'         => 'required|min:3|max:255|string',
+            'price'         => 'required|numeric', 
+            'contact'       => 'required|min:10|max:20|string', 
+            'location'      => 'required|string', 
+            'description'   => 'required|string', 
+        ]);
+
+        Listing::create([
+            'user_id' => $request->user()->id,
+            'category_id' => $request->get('category'),
+            'title' => $request->get('title'),
+            'price' => $request->get('price'),
+            'phone' => $request->get('contact'),
+            'location' => $request->get('location'),
+            'description' => $request->get('description'),
+            'image' => NULL, 
+            'wanted' => false,
+        ]);
+
+        return redirect()->back()->withSuccess('Your listing has been created successfully!');
     }
 
     /**
