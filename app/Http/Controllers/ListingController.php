@@ -89,7 +89,7 @@ class ListingController extends Controller
             'organization_id' => $org_id
         ]);
 
-        return redirect()->route('category.show', Category::where('id', $request->get('category'))->first())->withSuccess('Your listing has been created successfully!');
+        return redirect()->route('category.show', Category::where('id', $request->get('category'))->first(), false)->withSuccess('Your listing has been created successfully!');
     }
 
     /**
@@ -168,7 +168,7 @@ public function update(Request $request, Listing $listing)
     {
         $listing->delete(); 
 
-        return redirect()->route('welcome')->withSuccess('Your listing has been deleted successfully!');
+        return redirect()->route('welcome', [], false)->withSuccess('Your listing has been deleted successfully!');
 
     }
 }
