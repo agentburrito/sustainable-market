@@ -15,7 +15,7 @@ class CategoryController extends Controller
     public function index()
     {
         if (!auth()->user()->hasRole('admin')) {
-            return redirect()->route('welcome', [], false);
+            return redirect()->route('welcome');
         }
 
         $categories = Category::with('children')->whereNull('parent_id')->get();
@@ -44,7 +44,7 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         if (!auth()->user()->hasRole('admin')) {
-            return redirect()->route('welcome', [], false);
+            return redirect()->route('welcome');
         }
 
         $validatedData = $this->validate($request, [
@@ -54,7 +54,7 @@ class CategoryController extends Controller
 
         Category::create($validatedData);
 
-        return redirect()->route('category.index', [], false)->withSuccess('You have successfully added a category!');
+        return redirect()->route('category.index')->withSuccess('You have successfully added a category!');
     }
 
     /**
@@ -66,8 +66,9 @@ class CategoryController extends Controller
     public function show(Category $category)
     {
         $parentCategories = Category::whereNull('parent_id')->get();
+        $adlistings = $category->listings()->where('wanted', 0)->orderBy('updated_at', 'desc')->paginate(6);
 
-        return view('categories.show', compact('category', 'parentCategories'));
+        return view('categories.show', compact('category', 'parentCategories', 'adlistings'));
     }
 
     /**
@@ -91,7 +92,7 @@ class CategoryController extends Controller
     public function update(Request $request, $id)
     {
         if (!auth()->user()->hasRole('admin')) {
-            return redirect()->route('welcome', [], false);
+            return redirect()->route('welcome');
         }
 
         $validatedData = $this->validate($request, [
@@ -100,7 +101,7 @@ class CategoryController extends Controller
 
         $category->update($validatedData);
 
-        return redirect()->route('category.index', [], false)->withSuccess('You have successfully updated a category!');
+        return redirect()->route('category.index')->withSuccess('You have successfully updated a category!');
     }
 
     /**
@@ -113,7 +114,7 @@ class CategoryController extends Controller
     {
 
         if (!auth()->user()->hasRole('admin')) {
-            return redirect()->route('welcome', [], false);
+            return redirect()->route('welcome');
         }
 
         if ($category->children) {
@@ -132,6 +133,6 @@ class CategoryController extends Controller
 
         $category->delete();
 
-        return redirect()->route('category.index', [], false)->withSuccess('You have successfully deleted a category!');
+        return redirect()->route('category.index')->withSuccess('You have successfully deleted a category!');
     }
 }

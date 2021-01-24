@@ -31,8 +31,8 @@
         <div class="row">
             <h5>Results</h5>
         </div>
-        <div class="row">
-            @foreach($category->listings()->where('wanted', 0)->get() as $listing)
+        <div class="row" style="margin-bottom: 1rem;">
+            @foreach($adlistings as $listing)
             <div class="card" style="width: 15rem; margin-right: 1rem;">
                 <img src="{{ $listing->image == NULL ? 'https://via.placeholder.com/150' : $listing->image }}" style="height: 15rem;" class="card-img-top img-responsive" alt="{{$listing->title}} Image">
                 <div class="card-body">
@@ -44,6 +44,13 @@
             @endforeach
         </div>
 
+        <div class="row">
+            <div class="d-flex justify-content-center">
+                {!! $adlistings->links() !!}
+            </div>
+        </div>
+
+        @if($category->listings()->where('wanted', 1)->count() > 0)
         <hr>
         <div class="row">
             <h5>Charity Wanted</h5>
@@ -61,6 +68,7 @@
             </div>
             @endforeach
         </div>
+        @endif
         
     </div>
 @endsection

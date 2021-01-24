@@ -2,11 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use Stripe\Stripe;
 use App\Models\Listing;
 use App\Models\Category;
+use App\Events\ItemPurchase;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Intervention\Image\ImageManager;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Notifications\Messages\MailMessage;
+
 
 class ListingController extends Controller
 {
@@ -89,7 +95,7 @@ class ListingController extends Controller
             'organization_id' => $org_id
         ]);
 
-        return redirect()->route('category.show', Category::where('id', $request->get('category'))->first(), false)->withSuccess('Your listing has been created successfully!');
+        return redirect()->route('category.show', Category::where('id', $request->get('category'))->first())->withSuccess('Your listing has been created successfully!');
     }
 
     /**
@@ -155,7 +161,7 @@ public function update(Request $request, Listing $listing)
             'image' => $path, 
         ]);
 
-        return redirect()->back()->withSuccess('Your listing has been updated successfully!');
+        return redirect()->route('listing.show', $listing)->withSuccess('Your listing has been updated successfully!');
     }
 
     /**
@@ -168,7 +174,48 @@ public function update(Request $request, Listing $listing)
     {
         $listing->delete(); 
 
-        return redirect()->route('welcome', [], false)->withSuccess('Your listing has been deleted successfully!');
+        return redirect()->route('welcome')->withSuccess('Your listing has been deleted successfully!');
 
+    }
+
+    public function purchase(Listing $listing, Request $request)
+    {
+        \Stripe\Stripe::setApiKey('sk_test_2Fxm5RuasGLd6rMHQYhgnJnu');
+
+        $session = \Stripe\Checkout\Session::create([
+            'payment_method_types' => ['card'],
+            'line_items' => [[
+              'price_data' => [
+                'currency' => 'usd',
+                'product_data' => [
+                'name' => $listing->title,
+            ],
+            'unit_amount' => $listing->price*100,
+            ],
+            'quantity' => 1,
+        ]],
+        'mode' => 'payment',
+        'success_url' => 'http://market.test/listing/' . $listing->id . '/purchase/complete',
+        'cancel_url' => 'http://market.test/listing/' . $listing->id,
+        ]);
+
+        return response([ 'id' => $session->id ], 200);
+    }
+
+    public function complete(Listing $listing, Request $request) 
+    {
+        $title = $listing->title; 
+        $user = $listing->user; 
+
+        // $mail = (new MailMessage)
+        //                ->line('Your item has been purchased!')
+        //                ->line($listing->title)
+        //                ->action('Login Now', url('/login'));
+
+        $category = $listing->category;
+
+        $listing->delete(); 
+
+        return redirect()->route('category.show', $category)->withSuccess('You have successfully bought: ' . $title);
     }
 }

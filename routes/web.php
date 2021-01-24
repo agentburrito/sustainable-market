@@ -20,6 +20,8 @@ Auth::routes();
 
 Route::resource('category', 'App\Http\Controllers\CategoryController');
 Route::resource('listing', 'App\Http\Controllers\ListingController')->middleware('auth');
+Route::post('listing/{listing}/purchase', 'App\Http\Controllers\ListingController@purchase')->middleware('auth')->name('listing.purchase');
+Route::get('listing/{listing}/purchase/complete', 'App\Http\Controllers\ListingController@complete')->middleware('auth')->name('listing.purchase.complete');
 
 Route::get('organization/{organization}', 'App\Http\Controllers\OrganizationController@show')->middleware('auth')->name('organization.show');
 Route::get('organization/{organization}/edit', 'App\Http\Controllers\OrganizationController@edit')->middleware('auth')->name('organization.edit');
