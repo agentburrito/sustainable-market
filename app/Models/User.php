@@ -22,6 +22,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'picture'
     ];
 
     /**
@@ -51,5 +52,10 @@ class User extends Authenticatable
     public function memberOf($organization)
     {
         return $this->organizations->contains('name', $organization);
+    }
+
+    public function listings()
+    {
+        return $this->hasMany(Listing::class);
     }
 }

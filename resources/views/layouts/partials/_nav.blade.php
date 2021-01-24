@@ -47,6 +47,12 @@
                                 </a>
                             @endif
 
+                            @if(Auth::user() and Auth::user()->organizations->count())
+                                <a class="dropdown-item" href="{{ route('organization.edit', Auth::user()->organizations->first()) }}">
+                                    {{ __('Manage Organization') }}
+                                </a>
+                            @endif
+
 
                             <a class="dropdown-item" href="{{ route('logout') }}"
                                onclick="event.preventDefault();

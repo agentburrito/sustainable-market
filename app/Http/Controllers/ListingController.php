@@ -109,9 +109,10 @@ class ListingController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Listing $listing)
     {
-        //
+        $categories = Category::where('parent_id', '!=', NULL)->with('parent')->get();
+        return view('listings.edit', compact('listing', 'categories'));
     }
 
     /**
@@ -121,9 +122,40 @@ class ListingController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+public function update(Request $request, Listing $listing)
     {
-        //
+        $this->validate($request, [
+            'organization_name' => 'sometimes|required',
+            'organization_id'   => 'sometimes|required',
+            'title'             => 'required|min:3|max:255|string',
+            'price'             => 'sometimes|required|numeric', 
+            'contact'           => 'required|min:10|max:20|string', 
+            'location'          => 'required|string', 
+            'description'       => 'required|string',
+            'category'          => 'required' 
+        ]);
+
+        $path = NULL; 
+
+        if($request->image != null) {
+            $processedImage = $this->imageManager->make($request->file('image')->getPathName())
+                ->encode('png')
+                ->save(public_path('uploads/images/listings/' . $filename = uniqid(true) . '.png'));
+        
+            $path = '/uploads/images/listings/'.$filename; 
+        }
+
+        $listing->update([
+            'category_id' => $request->get('category'),
+            'title' => $request->get('title'),
+            'price' => $request->get('price'),
+            'phone' => $request->get('contact'),
+            'location' => $request->get('location'),
+            'description' => $request->get('description'),
+            'image' => $path, 
+        ]);
+
+        return redirect()->back()->withSuccess('Your listing has been updated successfully!');
     }
 
     /**
@@ -132,8 +164,11 @@ class ListingController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Listing $listing)
     {
-        //
+        $listing->delete(); 
+
+        return redirect()->route('welcome')->withSuccess('Your listing has been deleted successfully!');
+
     }
 }

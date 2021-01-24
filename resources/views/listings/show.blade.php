@@ -14,6 +14,11 @@
                     {{ $listing->description }}
                 </p>
             </div>
+            @if($listing->user == Auth::user())
+            <div class="card-footer">
+                <a href="{{ route('listing.edit', $listing) }}" class="float-right btn btn-warning">Edit Posting</a>
+            </div>
+            @endif
         </div>
     </div>
 
@@ -23,17 +28,28 @@
 
             <div class="card-body">
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item"><h4><i class="fas fa-user"></i> {{ $listing->user->name }}</h4></li>
+                        <li class="list-group-item">
+                            <a href="{{ route('user.profile.show', $listing->user) }}">
+                                <h4><i class="fas fa-user"></i> {{ $listing->user->name }}</h4>
+                            </a>
+                            @if($listing->wanted)
+                            (On behalf of: <a href="{{ route('organization.show', $listing->organization) }}">{{ $listing->organization->name }})</a>
+                            @endif
+
+                        </li>
                         <li class="list-group-item"><i class="fas fa-phone"></i> {{ $listing->phone }}</li>
                         <li class="list-group-item"><i class="fas fa-map-marker"></i> {{ $listing->location }}</li>
-                        <li class="list-group-item"><em>Posted {{ $listing->updated_at->diffForHumans() }} </em></li>
-                      </ul>
+                    </ul>
             </div>
+
+            <div class="card-footer">
+                <small class="text-muted">Last updated {{ $listing->updated_at->diffForHumans() }} </small>
+              </div>
         </div>
     </div>
 </div>
 
-@if($listing->wanted == false)
+@if($listing->wanted == false and $listing->category->listings()->where('wanted', 1)->count() > 0)
 <br>
 <hr>
 
@@ -44,7 +60,7 @@
     <div class="col-md-12">
         @foreach($listing->category->listings()->where('wanted', 1)->get() as $clisting)
             <div class="card" style="width: 10rem; margin-right: 1rem;">
-                <img src="{{ $clisting->image == NULL ? 'https://via.placeholder.com/150' : $clisting->image }}" style="height: 10rem;" class="card-img-top img-responsive" alt="{{$listing->title}} Image">
+                <img src="{{ $clisting->image == NULL ? 'https://via.placeholder.com/150' : $clisting->image }}" style="height: 10rem;" class="card-img-top img-responsive" alt="{{$clisting->title}} Image">
                 <div class="card-body">
                 <h5 class="card-title">{{$clisting->title}}</h5>
                 <p class="card-text">{{$clisting->description}}</p>
