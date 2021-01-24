@@ -5,9 +5,18 @@ namespace App\Http\Controllers;
 use App\Models\Listing;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Intervention\Image\ImageManager;
 
 class ListingController extends Controller
 {
+    protected $imageManager; 
+
+    public function __construct(ImageManager $imageManager)
+    {
+        $this->imageManager = $imageManager;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -40,12 +49,32 @@ class ListingController extends Controller
     {        
 
         $this->validate($request, [
-            'title'         => 'required|min:3|max:255|string',
-            'price'         => 'required|numeric', 
-            'contact'       => 'required|min:10|max:20|string', 
-            'location'      => 'required|string', 
-            'description'   => 'required|string', 
+            'organization_name' => 'sometimes|required',
+            'title'             => 'required|min:3|max:255|string',
+            'price'             => 'sometimes|required|numeric', 
+            'contact'           => 'required|min:10|max:20|string', 
+            'location'          => 'required|string', 
+            'description'       => 'required|string',
+            'category'          => 'required' 
         ]);
+
+        $path = NULL; 
+
+        if($request->image != null) {
+            $processedImage = $this->imageManager->make($request->file('image')->getPathName())
+                ->encode('png')
+                ->save(public_path('uploads/images/listings/' . $filename = uniqid(true) . '.png'));
+        
+            $path = '/uploads/images/listings/'.$filename; 
+        }
+
+        $wanted = false; 
+        $org_id = NULL;
+
+        if(($request->get('wanted') != NULL)) {
+            $wanted = true; 
+            $org_id = Auth::user()->organizations->first()->id;
+        }
 
         Listing::create([
             'user_id' => $request->user()->id,
@@ -55,8 +84,9 @@ class ListingController extends Controller
             'phone' => $request->get('contact'),
             'location' => $request->get('location'),
             'description' => $request->get('description'),
-            'image' => NULL, 
-            'wanted' => false,
+            'image' => $path, 
+            'wanted' => $wanted,
+            'organization_id' => $org_id
         ]);
 
         return redirect()->route('category.show', Category::where('id', $request->get('category'))->first())->withSuccess('Your listing has been created successfully!');

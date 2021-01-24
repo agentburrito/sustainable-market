@@ -15,23 +15,20 @@
 
             <!-- Right Side Of Navbar -->
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item px-4">
-                    <a class="btn btn-success btn-xs" href="{{ route('listing.create') }}">Create Listing</a>
-                </li>
                 
                 <!-- Authentication Links -->
                 @guest
-                    @if (Route::has('login'))
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                        </li>
-                    @endif
+                    <li class="nav-item border-right">
+                        <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                    </li>
                     
-                    @if (Route::has('register'))
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                        </li>
-                    @endif
+                    <li class="nav-item border-right">
+                        <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                    </li>
+
+                    <li class="nav-item ">
+                        <a class="nav-link" href="{{ route('register', ['organization' => true]) }}">{{ __('Organization Register') }}</a>
+                    </li>
                 @else
                     <li class="nav-item dropdown">
                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
@@ -40,6 +37,17 @@
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{{ route('user.profile.index') }}"">
+                                {{ __('My Profile') }}
+                            </a>
+
+                            @if(Auth::user()->hasRole('admin'))
+                                <a class="dropdown-item" href="{{ route('category.index') }}"">
+                                    {{ __('Manage Categories') }}
+                                </a>
+                            @endif
+
+
                             <a class="dropdown-item" href="{{ route('logout') }}"
                                onclick="event.preventDefault();
                                              document.getElementById('logout-form').submit();">
@@ -52,6 +60,16 @@
                         </div>
                     </li>
                 @endguest
+
+                <li class="nav-item" style="margin-left: 1rem;">
+                    <a class="btn btn-outline-success btn-xs" href="{{ route('listing.create') }}">Create Listing</a>
+                </li>
+
+                @if(Auth::user() and Auth::user()->organizations->count())
+                    <li class="nav-item px-4">
+                        <a class="btn btn-outline-secondary btn-xs" href="{{ route('listing.create', ['wanted' => true]) }}">Create Organization Listing</a>
+                    </li>
+                @endif
             </ul>
         </div>
     </div>

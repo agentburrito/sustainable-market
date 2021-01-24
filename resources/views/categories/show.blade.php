@@ -28,16 +28,18 @@
     </div>
 
     <div class="col-md-9">
-        @foreach($category->listings as $listing)
-            <div class="card" style="width: 12rem;">
-                <img src="https://via.placeholder.com/250" class="card-img-top" alt="{{$listing->title}} Image">
+        <div class="row">
+            @foreach($category->listings as $listing)
+            <div class="card" style="width: 15rem; margin-right: 1rem;">
+                <img src="{{ $listing->image == NULL ? 'https://via.placeholder.com/150' : $listing->image }}" style="height: 15rem;" class="card-img-top img-responsive" alt="{{$listing->title}} Image">
                 <div class="card-body">
-                <h5 class="card-title">{{$listing->title}}</h5>
+                <h5 class="card-title">{{$listing->title}} <span class="float-right text-success">${{ number_format($listing->price, 2) }}</span></h5>
                 <p class="card-text">{{$listing->description}}</p>
-                <a href="{{ route('listing.show', $listing) }}" class="btn btn-primary">View</a>
+                <a href="{{ route('listing.show', $listing) }}" class="btn btn-light btn-block stretched-link float-right">View</a>
                 </div>
             </div>
-        @endforeach
+            @endforeach
+        </div>
     </div>
 </div>
 @endsection

@@ -14,6 +14,10 @@ class CategoryController extends Controller
      */
     public function index()
     {
+        if (!auth()->user()->hasRole('admin')) {
+            return redirect()->route('welcome');
+        }
+
         $categories = Category::with('children')->whereNull('parent_id')->get();
 
         return view('categories.index')->with([
@@ -28,7 +32,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view('categories.create');
+        //
     }
 
     /**
@@ -39,6 +43,10 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
+        if (!auth()->user()->hasRole('admin')) {
+            return redirect()->route('welcome');
+        }
+
         $validatedData = $this->validate($request, [
             'name'      => 'required|min:3|max:255|string',
             'parent_id' => 'sometimes|nullable|numeric'
@@ -82,6 +90,10 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
+        if (!auth()->user()->hasRole('admin')) {
+            return redirect()->route('welcome');
+        }
+
         $validatedData = $this->validate($request, [
             'name'  => 'required|min:3|max:255|string'
         ]);
@@ -99,6 +111,11 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
+
+        if (!auth()->user()->hasRole('admin')) {
+            return redirect()->route('welcome');
+        }
+
         if ($category->children) {
             foreach ($category->children()->with('listings')->get() as $child) {
                 foreach ($child->listings as $listing) {

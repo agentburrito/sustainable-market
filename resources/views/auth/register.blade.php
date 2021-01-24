@@ -10,6 +10,38 @@
                 <div class="card-body">
                     <form method="POST" action="{{ route('register') }}">
                         @csrf
+                        
+                        @if(Request::get('organization')) 
+                            <div class="form-group row">
+                                <label for="organization_name" class="col-md-4 col-form-label text-md-right">{{ __('Organization Name') }}</label>
+
+                                <div class="col-md-6">
+                                    <input id="organization_name" type="text" class="form-control @error('organization_name') is-invalid @enderror" name="organization_name" value="{{ old('organization_name') }}" required autocomplete="organization_name" autofocus>
+
+                                    @error('organization_name')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="organization_description" class="col-md-4 col-form-label text-md-right">{{ __('Organization Description') }}</label>
+
+                                <div class="col-md-6">
+                                    <textarea id="organization_description" rows="3" class="form-control @error('organization_description') is-invalid @enderror" name="organization_description" value="{{ old('organization_description') }}" required></textarea>
+
+                                    @error('organization_description')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            
+                            <hr>
+                        @endif
 
                         <div class="form-group row">
                             <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>

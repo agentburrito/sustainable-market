@@ -7,7 +7,7 @@
         <div class="card">
 
             <div class="card-header"><a href="">{{ $listing->category->parent->name }}</a>  >  <a href="{{ route('category.show', $listing->category) }}"> {{ $listing->category->name }}</a>  >  <a href="">{{ $listing->title }}</a></div>
-            <img class="card-img-top" src="https://via.placeholder.com/350x150">
+            <img class="card-img-top" src="{{ $listing->image == NULL ? 'https://via.placeholder.com/350x150' : $listing->image }}">
             <div class="card-body">
                 <h4 class="card-title">{{ $listing->title }} <span class="float-right text-success">${{ number_format($listing->price, 2) }}</span></h4>
                 <p class="card-text">
