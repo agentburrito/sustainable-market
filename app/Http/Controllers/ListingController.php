@@ -47,9 +47,9 @@ class ListingController extends Controller
      */
     public function store(Request $request)
     {        
-
         $this->validate($request, [
             'organization_name' => 'sometimes|required',
+            'organization_id'   => 'sometimes|required',
             'title'             => 'required|min:3|max:255|string',
             'price'             => 'sometimes|required|numeric', 
             'contact'           => 'required|min:10|max:20|string', 
@@ -71,7 +71,7 @@ class ListingController extends Controller
         $wanted = false; 
         $org_id = NULL;
 
-        if(($request->get('wanted') != NULL)) {
+        if(($request->get('organization_id') != NULL)) {
             $wanted = true; 
             $org_id = Auth::user()->organizations->first()->id;
         }

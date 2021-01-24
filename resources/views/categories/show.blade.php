@@ -29,7 +29,10 @@
 
     <div class="col-md-9">
         <div class="row">
-            @foreach($category->listings as $listing)
+            <h5>Results</h5>
+        </div>
+        <div class="row">
+            @foreach($category->listings()->where('wanted', 0)->get() as $listing)
             <div class="card" style="width: 15rem; margin-right: 1rem;">
                 <img src="{{ $listing->image == NULL ? 'https://via.placeholder.com/150' : $listing->image }}" style="height: 15rem;" class="card-img-top img-responsive" alt="{{$listing->title}} Image">
                 <div class="card-body">
@@ -40,6 +43,24 @@
             </div>
             @endforeach
         </div>
+
+        <hr>
+        <div class="row">
+            <h5>Charity Wanted</h5>
+        </div>
+        <div class="row">
+            @foreach($category->listings()->where('wanted', 1)->get() as $listing)
+            <div class="card" style="width: 15rem; margin-right: 1rem;">
+                <img src="{{ $listing->image == NULL ? 'https://via.placeholder.com/150' : $listing->image }}" style="height: 15rem;" class="card-img-top img-responsive" alt="{{$listing->title}} Image">
+                <div class="card-body">
+                <h5 class="card-title">{{$listing->title}}</h5>
+                <p class="card-text">{{$listing->description}}</p>
+                <p class="card-text"><em>{{$listing->organization->name}}</em></p>
+                <a href="{{ route('listing.show', $listing) }}" class="btn btn-light btn-block stretched-link float-right">View</a>
+                </div>
+            </div>
+            @endforeach
+        </div>
+        
     </div>
-</div>
 @endsection

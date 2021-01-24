@@ -11,17 +11,20 @@
                     @csrf
 
                     @if(Request::get('wanted')) 
-                    <div class="form-group row">
-                        <label for="organization_name" class="col-md-4 col-form-label text-md-right">{{ __('Organization Name') }}</label>
+                        <div class="form-group row">
+                            <label for="organization_name" class="col-md-4 col-form-label text-md-right">{{ __('Organization Name') }}</label>
 
-                        <div class="col-md-6">
-                            <input id="organization_name" type="text" class="form-control" name="organization_name" value="{{ Auth::user()->organizations->first()->name }}" disabled>
-                            <p><em>You are posting a WANTED ad on behalf of your organization.</em></p>
+                            <div class="col-md-6">
+                                <input id="organization_name" type="text" class="form-control" value="{{ Auth::user()->organizations->first()->name }}" disabled>
+                                <p><em>You are posting a WANTED ad on behalf of your organization.</em></p>
 
+                                <input id="organization_name" type="hidden" name="organization_name" value="{{ Auth::user()->organizations->first()->name }}">
+                                <input id="organization_id" type="hidden" name="organization_id" value="{{ Auth::user()->organizations->first()->id }}">
+
+                            </div>
                         </div>
-                    </div>
-                    <hr>
-                @endif
+                        <hr>
+                    @endif
 
 
                     <div class="form-group row">
