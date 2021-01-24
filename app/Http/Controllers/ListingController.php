@@ -15,7 +15,8 @@ class ListingController extends Controller
      */
     public function index()
     {
-        //
+        $categories = Category::with('parent')->get();
+        return view('listings.index');
     }
 
     /**
@@ -58,7 +59,7 @@ class ListingController extends Controller
             'wanted' => false,
         ]);
 
-        return redirect()->back()->withSuccess('Your listing has been created successfully!');
+        return redirect()->route('category.show', Category::where('id', $request->get('category'))->first())->withSuccess('Your listing has been created successfully!');
     }
 
     /**
@@ -67,9 +68,9 @@ class ListingController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Listing $listing)
     {
-        //
+        return view('listings.show', compact('listing'));
     }
 
     /**

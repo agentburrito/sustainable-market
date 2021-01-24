@@ -55,9 +55,11 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Category $category)
     {
-        //
+        $parentCategories = Category::whereNull('parent_id')->get();
+
+        return view('categories.show', compact('category', 'parentCategories'));
     }
 
     /**
